@@ -1,0 +1,95 @@
+# =============================================================================
+# publish-release.yml
+# Declenche par le repo prive via repository_dispatch
+# Recoit les binaires et cree une release publique
+# =============================================================================
+name: Publish Public Release
+
+on:
+  repository_dispatch:
+    types: [new-release]
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download artifacts from private repo
+        env:
+          GH_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
+        run: |
+          TAG="${{ github.event.client_payload.tag }}"
+          RELEASE_ID="${{ github.event.client_payload.release_id }}"
+          REPO="jiiro974/clientshell"
+
+          echo "📦 Downloading artifacts for $TAG (release $RELEASE_ID)"
+          mkdir -p artifacts
+
+          # Lister les assets de la release privee
+          gh api "repos/$REPO/releases/$RELEASE_ID/assets" \
+            --jq '.[].name' | while read -r ASSET_NAME; do
+            echo "  ↓ $ASSET_NAME"
+            gh release download "$TAG" \
+              --repo "$REPO" \
+              --pattern "$ASSET_NAME" \
+              --dir artifacts
+          done
+
+          ls -lah artifacts/
+
+      - name: Create public release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="${{ github.event.client_payload.tag }}"
+          BODY="${{ github.event.client_payload.body }}"
+          PRERELEASE="${{ github.event.client_payload.prerelease }}"
+
+          PRERELEASE_FLAG=""
+          if [ "$PRERELEASE" = "true" ]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+
+          # Creer la release publique
+          gh release create "$TAG" \
+            --title "ClientShell $TAG" \
+            --notes "$BODY" \
+            $PRERELEASE_FLAG \
+            artifacts/*
+
+          echo "✅ Release $TAG publiee"
+
+      - name: Update downloads data for site
+        run: |
+          TAG="${{ github.event.client_payload.tag }}"
+          DATE=$(date -u +"%Y-%m-%d")
+
+          # Generer le fichier de donnees pour Jekyll
+          cat > docs/_data/latest_release.yml << EOF
+          version: "$TAG"
+          date: "$DATE"
+          assets:
+          EOF
+
+          for f in artifacts/*; do
+            FNAME=$(basename "$f")
+            SIZE=$(du -h "$f" | cut -f1)
+            cat >> docs/_data/latest_release.yml << EOF
+            - name: "$FNAME"
+              size: "$SIZE"
+              url: "https://github.com/jiiro974/clientshell-releases/releases/download/$TAG/$FNAME"
+          EOF
+          done
+
+      - name: Commit updated release data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/_data/latest_release.yml
+          git diff --staged --quiet || git commit -m "chore: update release data for ${{ github.event.client_payload.tag }}"
+          git push

@@ -1,0 +1,33 @@
+title: ClientShell
+description: Plateforme MSP/SOC de gestion securisee de postes de travail
+url: "https://jiiro974.github.io"
+baseurl: "/clientshell-releases"
+
+remote_theme: pages-themes/minimal@v0.2.0
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+collections:
+  docs:
+    output: true
+    permalink: /docs/:title/
+
+nav:
+  - title: Accueil
+    url: /
+  - title: Installation
+    url: /docs/installation/
+  - title: Configuration
+    url: /docs/configuration/
+  - title: Utilisation
+    url: /docs/usage/
+  - title: Releases
+    url: https://github.com/jiiro974/clientshell-releases/releases
