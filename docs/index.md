@@ -27,6 +27,10 @@ title: ClientShell
      style="display: inline-block; padding: 12px 28px; background: #6f42c1; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 1.1rem; margin: 0.5rem;">
     Guide demarrage
   </a>
+  <a href="/clientshell-releases/docs/demos/"
+     style="display: inline-block; padding: 12px 28px; background: #e36209; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 1.1rem; margin: 0.5rem;">
+    Voir les demos
+  </a>
   </div>
 </div>
 
