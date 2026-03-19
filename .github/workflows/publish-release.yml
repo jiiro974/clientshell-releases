@@ -1,8 +1,3 @@
-# =============================================================================
-# publish-release.yml
-# Declenche par le repo prive via repository_dispatch
-# Recoit les binaires, cree une release publique, et met a jour la doc
-# =============================================================================
 name: Publish Public Release
 
 on:
@@ -14,7 +9,7 @@ permissions:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,6 +29,27 @@ jobs:
             gh release download "$TAG" --repo "$REPO" --pattern "$ASSET_NAME" --dir artifacts
           done
 
+      - name: Notarize macOS binaries
+        if: env.APPLE_ID != ''
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+        run: |
+          for bin in artifacts/*-darwin-*; do
+            [ -f "$bin" ] || continue
+            BASENAME=$(basename "$bin")
+            echo "Notarizing $BASENAME..."
+            ZIP="/tmp/${BASENAME}.zip"
+            ditto -c -k --keepParent "$bin" "$ZIP"
+            xcrun notarytool submit "$ZIP" \
+              --apple-id "$APPLE_ID" \
+              --team-id "$APPLE_TEAM_ID" \
+              --password "$APPLE_APP_PASSWORD" \
+              --wait || echo "Warning: notarization failed for $BASENAME"
+            xcrun stapler staple "$bin" 2>/dev/null || true
+          done
+
       - name: Create public release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,13 +65,8 @@ jobs:
         run: |
           TAG="${{ github.event.client_payload.tag }}"
           DATE=$(date -u +"%Y-%m-%d")
-
-          # Update Jekyll data
-          mkdir -p docs/_data
+          mkdir -p docs/_data docs/_docs
           printf 'version: "%s"\ndate: "%s"\n' "$TAG" "$DATE" > docs/_data/latest_release.yml
-
-          # Generate downloads page
-          mkdir -p docs/_docs
           BASE="https://github.com/jiiro974/clientshell-releases/releases/download/$TAG"
           cat > docs/_docs/downloads.md << EOF
           ---
@@ -72,7 +83,6 @@ jobs:
           | Linux amd64 | [Download]($BASE/clientshell-linux-amd64) | [Download]($BASE/cs-toolbox-linux-amd64) | [Download]($BASE/cs-server-linux-amd64) |
           | Linux arm64 | [Download]($BASE/clientshell-linux-arm64) | [Download]($BASE/cs-toolbox-linux-arm64) | [Download]($BASE/cs-server-linux-arm64) |
           | Windows amd64 | [Download]($BASE/clientshell-windows-amd64.exe) | [Download]($BASE/cs-toolbox-windows-amd64.exe) | [Download]($BASE/cs-server-windows-amd64.exe) |
-          | Windows arm64 | [Download]($BASE/clientshell-windows-arm64.exe) | [Download]($BASE/cs-toolbox-windows-arm64.exe) | [Download]($BASE/cs-server-windows-arm64.exe) |
           EOF
 
       - name: Commit and push
