@@ -5,79 +5,96 @@ title: Installation
 
 # Installation
 
-## macOS
+## Prerequis
 
-### Via DMG (recommande)
+- **Go 1.22+** (pour compiler depuis les sources)
+- **Docker** (optionnel, pour les VMs clients)
+- **macOS / Linux / Windows**
 
-1. Telecharger le `.dmg` depuis la [page de releases](https://github.com/jiiro974/clientshell-releases/releases/latest)
-2. Ouvrir le DMG et glisser ClientShell dans Applications
-3. Au premier lancement, macOS peut demander une autorisation (le binaire est signe et notarise)
+## Binaires pre-compiles
 
-### Via Homebrew (a venir)
-
-```bash
-brew tap jiiro974/clientshell
-brew install clientshell
-```
-
-### Via binaire direct
+Telechargez la derniere release :
 
 ```bash
-# Telecharger le binaire universel (arm64 + amd64)
-curl -L -o clientshell \
-  https://github.com/jiiro974/clientshell-releases/releases/latest/download/clientshell-darwin-universal
+# macOS (Apple Silicon)
+curl -LO https://github.com/jiiro974/clientshell-releases/releases/latest/download/clientshell-darwin-arm64
+curl -LO https://github.com/jiiro974/clientshell-releases/releases/latest/download/cs-toolbox-darwin-arm64
+curl -LO https://github.com/jiiro974/clientshell-releases/releases/latest/download/cs-server-darwin-arm64
+chmod +x clientshell-darwin-arm64 cs-toolbox-darwin-arm64 cs-server-darwin-arm64
 
-chmod +x clientshell
-sudo mv clientshell /usr/local/bin/
+# Linux (amd64)
+curl -LO https://github.com/jiiro974/clientshell-releases/releases/latest/download/clientshell-linux-amd64
+curl -LO https://github.com/jiiro974/clientshell-releases/releases/latest/download/cs-toolbox-linux-amd64
+curl -LO https://github.com/jiiro974/clientshell-releases/releases/latest/download/cs-server-linux-amd64
+chmod +x clientshell-linux-amd64 cs-toolbox-linux-amd64 cs-server-linux-amd64
+
+# Windows (amd64) — telecharger les .exe depuis la page Releases
 ```
 
----
-
-## Linux
-
-### Debian / Ubuntu (.deb)
+## Depuis les sources
 
 ```bash
-curl -L -o clientshell.deb \
-  https://github.com/jiiro974/clientshell-releases/releases/latest/download/clientshell-linux-amd64.deb
-
-sudo dpkg -i clientshell.deb
+git clone https://github.com/jiiro974/clientshell.git
+cd clientshell
+make build          # compile les 3 binaires dans bin/
+make install        # installe dans /usr/local/bin/
 ```
 
-### RHEL / Fedora (.rpm)
+### Options d'installation
 
 ```bash
-curl -L -o clientshell.rpm \
-  https://github.com/jiiro974/clientshell-releases/releases/latest/download/clientshell-linux-amd64.rpm
-
-sudo rpm -i clientshell.rpm
+make install PREFIX=~/.local       # installe dans ~/.local/bin/
+make install PREFIX=/opt/cs        # installe dans /opt/cs/bin/
+make uninstall                     # desinstalle
 ```
 
-### Binaire direct
+## macOS — Gatekeeper
+
+Les binaires non notarises declenchent un avertissement Gatekeeper. Pour autoriser :
 
 ```bash
-curl -L -o clientshell \
-  https://github.com/jiiro974/clientshell-releases/releases/latest/download/clientshell-linux-amd64
+# Option 1 : retirer la quarantaine
+make unquarantine
 
-chmod +x clientshell
-sudo mv clientshell /usr/local/bin/
+# Option 2 : via Preferences Systeme
+# Confidentialite et securite → Autoriser quand meme
+
+# Option 3 : xattr manuellement
+xattr -d com.apple.quarantine clientshell-darwin-arm64
 ```
 
----
-
-## Windows
-
-1. Telecharger le `.msi` ou `.exe` depuis les [releases](https://github.com/jiiro974/clientshell-releases/releases/latest)
-2. Lancer l'installateur
-3. ClientShell sera disponible dans le PATH
-
----
-
-## Verification de l'installation
+## Verification
 
 ```bash
-clientshell --version
-clientshell health
+clientshell version
+cs-toolbox version
+cs-toolbox help
 ```
 
-La commande `health` verifie la connectivite au serveur et l'etat des composants.
+## Autocompletion
+
+```bash
+# Bash
+cs-toolbox completion bash >> ~/.bashrc
+
+# Zsh
+cs-toolbox completion zsh >> ~/.zshrc
+```
+
+## Docker
+
+```bash
+# Demo avec 6 clients fictifs
+make docker-up        # demarre l'infra Docker Compose
+./scripts/demo-seed.sh  # provisionne users, incidents, credentials
+```
+
+## Mise a jour
+
+```bash
+# Depuis les sources
+git pull && make build && make install
+
+# Plugins
+cs-toolbox upgrade --all
+```
