@@ -5,7 +5,33 @@ title: Installation
 
 # Installation
 
-## Prerequis
+## Homebrew (recommande pour macOS)
+
+La methode la plus simple — pas de quarantaine Gatekeeper :
+
+```bash
+brew tap jiiro974/clientshell
+brew install clientshell
+```
+
+Cela installe les 3 binaires + autocompletion zsh/bash :
+- `clientshell` — CLI interactif
+- `cs-toolbox` — 70+ outils SOC
+- `cs-server` — Serveur central
+
+Pour installer uniquement cs-toolbox :
+
+```bash
+brew install jiiro974/clientshell/cs-toolbox
+```
+
+Mise a jour :
+
+```bash
+brew upgrade clientshell
+```
+
+## Prerequis (installation manuelle)
 
 - **Go 1.22+** (pour compiler depuis les sources)
 - **Docker** (optionnel, pour les VMs clients)
@@ -21,6 +47,11 @@ curl -LO https://github.com/jiiro974/clientshell-releases/releases/latest/downlo
 curl -LO https://github.com/jiiro974/clientshell-releases/releases/latest/download/cs-toolbox-darwin-arm64
 curl -LO https://github.com/jiiro974/clientshell-releases/releases/latest/download/cs-server-darwin-arm64
 chmod +x clientshell-darwin-arm64 cs-toolbox-darwin-arm64 cs-server-darwin-arm64
+
+# IMPORTANT: retirer la quarantaine macOS (sinon Gatekeeper bloque)
+xattr -d com.apple.quarantine clientshell-darwin-arm64
+xattr -d com.apple.quarantine cs-toolbox-darwin-arm64
+xattr -d com.apple.quarantine cs-server-darwin-arm64
 
 # Linux (amd64)
 curl -LO https://github.com/jiiro974/clientshell-releases/releases/latest/download/clientshell-linux-amd64
@@ -50,18 +81,29 @@ make uninstall                     # desinstalle
 
 ## macOS — Gatekeeper
 
-Les binaires non notarises declenchent un avertissement Gatekeeper. Pour autoriser :
+Les binaires telecharges depuis GitHub declenchent un avertissement Gatekeeper car ils ne sont pas notarises par Apple. Trois solutions :
+
+**Solution 1 : Installer via Homebrew (recommande)** — aucune quarantaine :
 
 ```bash
-# Option 1 : retirer la quarantaine
-make unquarantine
-
-# Option 2 : via Preferences Systeme
-# Confidentialite et securite → Autoriser quand meme
-
-# Option 3 : xattr manuellement
-xattr -d com.apple.quarantine clientshell-darwin-arm64
+brew tap jiiro974/clientshell && brew install clientshell
 ```
+
+**Solution 2 : Retirer la quarantaine manuellement** :
+
+```bash
+# Apres telechargement depuis GitHub
+xattr -d com.apple.quarantine cs-toolbox-darwin-arm64
+xattr -d com.apple.quarantine clientshell-darwin-arm64
+xattr -d com.apple.quarantine cs-server-darwin-arm64
+
+# Ou pour un build local
+make unquarantine
+```
+
+**Solution 3 : Via Preferences Systeme** :
+
+Apres le premier lancement bloque, aller dans **Reglages Systeme → Confidentialite et securite → Autoriser quand meme**.
 
 ## Verification
 

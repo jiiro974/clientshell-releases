@@ -10,14 +10,24 @@ title: ClientShell
     <strong>Go stdlib only. Zero dependance externe. 70+ outils.</strong>
   </p>
 
+  <p style="background: #f0f0f0; padding: 12px 20px; border-radius: 8px; font-family: monospace; font-size: 1rem; display: inline-block; margin-bottom: 1rem;">
+    brew tap jiiro974/clientshell && brew install clientshell
+  </p>
+
+  <div>
   <a href="https://github.com/jiiro974/clientshell-releases/releases/latest"
      style="display: inline-block; padding: 12px 28px; background: #2ea44f; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 1.1rem; margin: 0.5rem;">
-    Telecharger la derniere version
+    Telecharger
+  </a>
+  <a href="/clientshell-releases/docs/installation/"
+     style="display: inline-block; padding: 12px 28px; background: #0969da; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 1.1rem; margin: 0.5rem;">
+    Installation
   </a>
   <a href="/clientshell-releases/docs/quickstart/"
-     style="display: inline-block; padding: 12px 28px; background: #0969da; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 1.1rem; margin: 0.5rem;">
-    Guide de demarrage
+     style="display: inline-block; padding: 12px 28px; background: #6f42c1; color: white; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 1.1rem; margin: 0.5rem;">
+    Guide demarrage
   </a>
+  </div>
 </div>
 
 ---
