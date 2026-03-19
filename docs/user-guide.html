@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClientShell - Secure Workstation Platform for MSP/SOC Teams</title>
+<style>
+/* ========================================
+   CSS Custom Properties
+   ======================================== */
+:root {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-blue: #4a9eed;
+  --accent-purple: #8b5cf6;
+  --accent-green: #22c55e;
+  --accent-orange: #f59e0b;
+  --accent-red: #ef4444;
+  --accent-cyan: #06b6d4;
+  --gradient-main: linear-gradient(135deg, #4a9eed, #8b5cf6);
+  --glow-blue: 0 0 20px rgba(74, 158, 237, 0.3);
+  --glow-purple: 0 0 20px rgba(139, 92, 246, 0.3);
+  --border-subtle: 1px solid rgba(74, 158, 237, 0.15);
+  --border-hover: 1px solid rgba(74, 158, 237, 0.4);
+  --radius: 8px;
+  --radius-lg: 12px;
+  --nav-height: 64px;
+  --max-width: 1200px;
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ========================================
+   Reset & Base
+   ======================================== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-height) + 24px);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   Navigation
+   ======================================== */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: var(--border-subtle);
+  height: var(--nav-height);
+  display: flex;
+  align-items: center;
+}
+
+.nav-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.nav-logo-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gradient-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(74, 158, 237, 0.4);
+}
+
+.nav-links {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--text-primary);
+  background: rgba(74, 158, 237, 0.1);
+}
+
+/* ========================================
+   Header / Hero
+   ======================================== */
+.hero {
+  text-align: center;
+  padding: 100px 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(74, 158, 237, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-logo {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--gradient-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 32px;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #fff;
+  box-shadow: 0 0 40px rgba(74, 158, 237, 0.4), 0 0 80px rgba(139, 92, 246, 0.2);
+  animation: logoPulse 4s ease-in-out infinite;
+  position: relative;
+}
+
+@keyframes logoPulse {
+  0%, 100% { box-shadow: 0 0 40px rgba(74, 158, 237, 0.4), 0 0 80px rgba(139, 92, 246, 0.2); }
+  50% { box-shadow: 0 0 60px rgba(74, 158, 237, 0.6), 0 0 120px rgba(139, 92, 246, 0.3); }
+}
+
+.hero h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 12px;
+  letter-spacing: -1px;
+}
+
+.hero .tagline {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.badge {
+  display: inline-block;
+  background: var(--bg-secondary);
+  border: var(--border-subtle);
+  color: var(--accent-blue);
+  padding: 8px 20px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* ========================================
+   Layout
+   ======================================== */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+section {
+  padding: 80px 0;
+}
+
+section:nth-child(even) {
+  background: rgba(30, 41, 59, 0.3);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.section-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.section-header .section-num {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.section-header p {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   Cards
+   ======================================== */
+.card {
+  background: var(--bg-secondary);
+  border: var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+.card:hover {
+  border-color: rgba(74, 158, 237, 0.4);
+  box-shadow: var(--glow-blue);
+  transform: translateY(-2px);
+}
+
+.card h3 {
+  font-size: 1.15rem;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.card p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+}
+
+.card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  margin-bottom: 16px;
+}
+
+/* ========================================
+   Code Blocks
+   ======================================== */
+pre {
+  background: var(--bg-secondary);
+  border: var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  margin: 16px 0;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+
+/* Inline code */
+p code, li code, td code {
+  background: rgba(74, 158, 237, 0.1);
+  border: 1px solid rgba(74, 158, 237, 0.15);
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: var(--accent-blue);
+  font-size: 0.85em;
+}
+
+/* Syntax colors */
+.kw { color: var(--accent-purple); }
+.cm { color: var(--text-muted); font-style: italic; }
+.st { color: var(--accent-green); }
+.fn { color: var(--accent-blue); }
+.fl { color: var(--accent-orange); }
+.op { color: var(--text-secondary); }
+.pr { color: var(--accent-cyan); }
+.var { color: #f472b6; }
+
+/* ========================================
+   Grid Layouts
+   ======================================== */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+/* ========================================
+   Tables
+   ======================================== */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  border: var(--border-subtle);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+thead {
+  background: rgba(74, 158, 237, 0.08);
+}
+
+th {
+  text-align: left;
+  padding: 14px 20px;
+  font-weight: 600;
+  color: var(--accent-blue);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: var(--border-subtle);
+}
+
+td {
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(74, 158, 237, 0.06);
+  color: var(--text-secondary);
+}
+
+tr:hover td {
+  background: rgba(74, 158, 237, 0.04);
+}
+
+td:first-child {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ========================================
+   Connection Mode Cards
+   ======================================== */
+.mode-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.mode-card {
+  background: var(--bg-secondary);
+  border: var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px;
+  text-align: center;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.mode-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-main);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.mode-card:hover {
+  border-color: rgba(74, 158, 237, 0.4);
+  box-shadow: var(--glow-blue);
+  transform: translateY(-3px);
+}
+
+.mode-card:hover::before {
+  opacity: 1;
+}
+
+.mode-icon {
+  font-size: 2rem;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.mode-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.mode-card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.mode-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.mode-tag.default {
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--accent-green);
+}
+
+.mode-tag.vnc {
+  background: rgba(139, 92, 246, 0.12);
+  color: var(--accent-purple);
+}
+
+.mode-tag.cdp {
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--accent-orange);
+}
+
+/* ========================================
+   Toolbox Grid
+   ======================================== */
+.toolbox-col h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid;
+}
+
+.toolbox-col.network h3 { border-color: var(--accent-blue); color: var(--accent-blue); }
+.toolbox-col.system h3 { border-color: var(--accent-green); color: var(--accent-green); }
+.toolbox-col.security h3 { border-color: var(--accent-red); color: var(--accent-red); }
+
+.tool-list {
+  list-style: none;
+}
+
+.tool-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+}
+
+.tool-list li::before {
+  content: '\203A';
+  color: var(--text-muted);
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.tool-list code {
+  background: rgba(74, 158, 237, 0.08);
+  border: none;
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: var(--text-primary);
+  font-size: 0.85em;
+}
+
+/* ========================================
+   Architecture Diagram
+   ======================================== */
+.arch-diagram {
+  background: var(--bg-secondary);
+  border: var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  text-align: center;
+}
+
+.arch-layer {
+  background: var(--bg-primary);
+  border: var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 12px 0;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.arch-layer:hover {
+  border-color: rgba(74, 158, 237, 0.4);
+  box-shadow: var(--glow-blue);
+}
+
+.arch-label {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.arch-label.user { color: var(--accent-blue); }
+.arch-label.service { color: var(--accent-purple); }
+.arch-label.infra { color: var(--accent-green); }
+.arch-label.comm { color: var(--accent-orange); }
+
+.arch-items {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.arch-item {
+  background: rgba(74, 158, 237, 0.06);
+  border: 1px solid rgba(74, 158, 237, 0.12);
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.arch-arrow {
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  margin: 4px 0;
+  display: block;
+}
+
+/* ========================================
+   Security Cards
+   ======================================== */
+.security-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.sec-card {
+  background: var(--bg-secondary);
+  border: var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  position: relative;
+}
+
+.sec-card:hover {
+  border-color: rgba(74, 158, 237, 0.4);
+  box-shadow: var(--glow-blue);
+  transform: translateY(-2px);
+}
+
+.sec-card .sec-icon {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.sec-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.sec-card p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.sec-card .sec-detail {
+  margin-top: 12px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  background: var(--bg-primary);
+  padding: 10px 14px;
+  border-radius: 6px;
+}
+
+/* RBAC matrix */
+.rbac-table {
+  margin-top: 12px;
+  font-size: 0.82rem;
+}
+
+.rbac-table table {
+  font-size: 0.82rem;
+}
+
+.rbac-table th, .rbac-table td {
+  padding: 6px 10px;
+  text-align: center;
+}
+
+.rbac-table td:first-child, .rbac-table th:first-child {
+  text-align: left;
+}
+
+.check { color: var(--accent-green); }
+.cross { color: var(--accent-red); }
+
+/* ========================================
+   API Reference
+   ======================================== */
+.endpoint {
+  background: var(--bg-secondary);
+  border: var(--border-subtle);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  transition: border-color 0.3s;
+}
+
+.endpoint:hover {
+  border-color: rgba(74, 158, 237, 0.3);
+}
+
+.method {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  min-width: 56px;
+  text-align: center;
+}
+
+.method.get {
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--accent-green);
+}
+
+.method.post {
+  background: rgba(74, 158, 237, 0.12);
+  color: var(--accent-blue);
+}
+
+.method.ws {
+  background: rgba(139, 92, 246, 0.12);
+  color: var(--accent-purple);
+}
+
+.endpoint-info {
+  flex: 1;
+}
+
+.endpoint-path {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.endpoint-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.api-group-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-blue);
+  margin: 32px 0 16px;
+}
+
+.api-group-title:first-child {
+  margin-top: 0;
+}
+
+/* ========================================
+   Footer
+   ======================================== */
+footer {
+  border-top: var(--border-subtle);
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.footer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.footer-stats {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.footer-stat {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.footer-stat strong {
+  color: var(--accent-blue);
+}
+
+footer p {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+/* ========================================
+   Animated scan line (decorative)
+   ======================================== */
+.scanline {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanline::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+  animation: scanMove 6s linear infinite;
+}
+
+@keyframes scanMove {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+/* ========================================
+   Step indicators
+   ======================================== */
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.step {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.step-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gradient-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.step-content {
+  flex: 1;
+}
+
+.step-content h4 {
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.step-content p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.2rem;
+  }
+
+  .hero .tagline {
+    font-size: 1rem;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .grid-3, .mode-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-2, .security-grid {
+    grid-template-columns: 1fr;
+  }
+
+  section {
+    padding: 48px 0;
+  }
+
+  .arch-diagram {
+    padding: 20px;
+  }
+
+  table {
+    font-size: 0.82rem;
+  }
+
+  th, td {
+    padding: 8px 12px;
+  }
+
+  .footer-stats {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+
+  .hero-logo {
+    width: 72px;
+    height: 72px;
+    font-size: 1.5rem;
+  }
+
+  .endpoint {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ Navigation ============ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#top" class="nav-brand">
+      <div class="nav-logo-sm">CS</div>
+      ClientShell
+    </a>
+    <ul class="nav-links">
+      <li><a href="#quickstart">Quick Start</a></li>
+      <li><a href="#commands">Commands</a></li>
+      <li><a href="#toolbox">Toolbox</a></li>
+      <li><a href="#architecture">Architecture</a></li>
+      <li><a href="#security">Security</a></li>
+      <li><a href="#api">API</a></li>
+      <li><a href="#new-features">v2.0</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============ Hero ============ -->
+<header class="hero" id="top">
+  <div class="hero-logo">CS</div>
+  <h1>ClientShell</h1>
+  <p class="tagline">Secure Workstation Platform for MSP/SOC Teams</p>
+  <span class="badge">Go stdlib-only &nbsp;|&nbsp; Zero Dependencies &nbsp;|&nbsp; TDD &nbsp;|&nbsp; v2.0.0</span>
+  <div style="margin-top: 24px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+    <a href="https://github.com/jiiro974/clientshell/releases/tag/v2.0.0" style="display: inline-block; padding: 12px 28px; background: linear-gradient(135deg, #4a9eed, #8b5cf6); color: #fff; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 16px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(74, 158, 237, 0.4);">Download v2.0.0</a>
+    <a href="#quickstart" style="display: inline-block; padding: 12px 28px; background: transparent; color: #4a9eed; text-decoration: none; border: 2px solid #4a9eed; border-radius: 8px; font-weight: 700; font-size: 16px; transition: all 0.3s ease;">Quick Start</a>
+    <a href="https://github.com/jiiro974/clientshell" style="display: inline-block; padding: 12px 28px; background: rgba(255,255,255,0.05); color: #e2e8f0; text-decoration: none; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; font-weight: 600; font-size: 16px; transition: all 0.3s ease;">GitHub</a>
+  </div>
+  <div style="margin-top: 16px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; font-size: 13px; color: #94a3b8;">
+    <span>21 packages</span><span>&bull;</span>
+    <span>70+ SOC tools</span><span>&bull;</span>
+    <span>3 platforms</span><span>&bull;</span>
+    <span>SQL engine</span><span>&bull;</span>
+    <span>Distributed mode</span><span>&bull;</span>
+    <span>Plugin system</span>
+  </div>
+</header>
+
+<!-- ============ Section 1: Quick Start ============ -->
+<section id="quickstart">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">Section 01</span>
+      <h2>Quick Start</h2>
+      <p>Get up and running in under two minutes. No external dependencies required.</p>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Prerequisites</h4>
+              <p>Go 1.22+ and Docker installed on your system.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Build</h4>
+              <pre><span class="cm"># Build all binaries</span>
+<span class="fn">go build</span> <span class="st">./cmd/clientshell</span>
+<span class="fn">go build</span> <span class="st">./cmd/cs-toolbox</span>
+<span class="fn">go build</span> <span class="st">./cmd/cs-server</span></pre>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>First Run</h4>
+              <pre><span class="cm"># Start interactive shell</span>
+<span class="fn">./clientshell</span>
+
+<span class="cm"># Connect to a client</span>
+<span class="fn">./clientshell</span> <span class="kw">connect</span> <span class="st">acme-corp</span></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 style="margin-bottom: 16px; font-size: 1.1rem;">Connection Modes</h3>
+        <div class="mode-cards" style="grid-template-columns: 1fr;">
+          <div class="mode-card">
+            <span class="mode-icon">&#9002;</span>
+            <h3>Shell</h3>
+            <p>Default interactive terminal with full readline support, history, and autocomplete.</p>
+            <span class="mode-tag default">Default Mode</span>
+          </div>
+          <div class="mode-card">
+            <span class="mode-icon">&#9635;</span>
+            <h3>Desktop</h3>
+            <p>Remote desktop via VNC for graphical workstation access and administration.</p>
+            <span class="mode-tag vnc">VNC</span>
+          </div>
+          <div class="mode-card">
+            <span class="mode-icon">&#9673;</span>
+            <h3>Browser</h3>
+            <p>Automated browser with CDP recording for web-based SOC investigation workflows.</p>
+            <span class="mode-tag cdp">CDP Recording</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Section 2: Commands ============ -->
+<section id="commands">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">Section 02</span>
+      <h2>Commands</h2>
+      <p>Complete reference for all interactive shell commands.</p>
+    </div>
+
+    <div class="table-wrap scanline">
+      <table>
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>connect</code></td>
+            <td>Connect to a client workstation and start a session</td>
+            <td><code>connect acme-corp</code></td>
+          </tr>
+          <tr>
+            <td><code>disconnect</code></td>
+            <td>Gracefully close the current session</td>
+            <td><code>disconnect</code></td>
+          </tr>
+          <tr>
+            <td><code>status</code></td>
+            <td>Show connection status and active sessions</td>
+            <td><code>status</code></td>
+          </tr>
+          <tr>
+            <td><code>logs</code></td>
+            <td>View audit logs with optional filters</td>
+            <td><code>logs --tail 50</code></td>
+          </tr>
+          <tr>
+            <td><code>verify</code></td>
+            <td>Verify integrity of the audit hash chain</td>
+            <td><code>verify --full</code></td>
+          </tr>
+          <tr>
+            <td><code>exec</code></td>
+            <td>Execute a command on the connected workstation</td>
+            <td><code>exec ps aux</code></td>
+          </tr>
+          <tr>
+            <td><code>invite</code></td>
+            <td>Generate an invite token for a new user</td>
+            <td><code>invite --role analyst</code></td>
+          </tr>
+          <tr>
+            <td><code>join</code></td>
+            <td>Join an existing session as observer or collaborator</td>
+            <td><code>join session-abc123</code></td>
+          </tr>
+          <tr>
+            <td><code>observe</code></td>
+            <td>Watch a live session in read-only mode</td>
+            <td><code>observe session-abc123</code></td>
+          </tr>
+          <tr>
+            <td><code>inspect</code></td>
+            <td>Inspect session details, metadata, and recordings</td>
+            <td><code>inspect session-abc123</code></td>
+          </tr>
+          <tr>
+            <td><code>kill</code></td>
+            <td>Terminate an active session (admin only)</td>
+            <td><code>kill session-abc123</code></td>
+          </tr>
+          <tr>
+            <td><code>version</code></td>
+            <td>Display build version and Go runtime info</td>
+            <td><code>version</code></td>
+          </tr>
+          <tr>
+            <td><code>help</code></td>
+            <td>Show help for all commands or a specific command</td>
+            <td><code>help connect</code></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Section 3: cs-toolbox ============ -->
+<section id="toolbox">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">Section 03</span>
+      <h2>cs-toolbox</h2>
+      <p>Over 60 integrated tools for network analysis, system diagnostics, and security operations.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="toolbox-col network">
+        <h3>Network</h3>
+        <ul class="tool-list">
+          <li><code>ping</code> ICMP reachability check</li>
+          <li><code>nslookup</code> DNS name resolution</li>
+          <li><code>traceroute</code> Network path tracing</li>
+          <li><code>portscan</code> TCP/UDP port scanning</li>
+          <li><code>whois</code> Domain registration lookup</li>
+          <li><code>dns-enum</code> DNS record enumeration</li>
+          <li><code>cert-check</code> TLS certificate validation</li>
+          <li><code>http-headers</code> HTTP header analysis</li>
+          <li><code>ssl-audit</code> SSL/TLS configuration audit</li>
+          <li><code>mx-toolbox</code> Mail server diagnostics</li>
+        </ul>
+      </div>
+
+      <div class="toolbox-col system">
+        <h3>System</h3>
+        <ul class="tool-list">
+          <li><code>ps</code> Process listing and monitoring</li>
+          <li><code>df</code> Disk usage and filesystem info</li>
+          <li><code>meminfo</code> Memory utilization stats</li>
+          <li><code>sysinfo</code> System information summary</li>
+          <li><code>health</code> Multi-protocol health checks</li>
+          <li style="padding-left: 24px; font-size: 0.82rem; color: var(--text-muted);">HTTP, TCP, UDP, SSL</li>
+          <li style="padding-left: 24px; font-size: 0.82rem; color: var(--text-muted);">SMTP, WebSocket, VPN</li>
+          <li style="padding-left: 24px; font-size: 0.82rem; color: var(--text-muted);">Disk, Memory monitoring</li>
+        </ul>
+      </div>
+
+      <div class="toolbox-col security">
+        <h3>Security</h3>
+        <ul class="tool-list">
+          <li><code>hash</code> File hash generation</li>
+          <li><code>check-hash</code> Hash verification</li>
+          <li><code>scan</code> Vulnerability scanning</li>
+          <li><code>ioc-scan</code> Indicator of compromise scan</li>
+          <li><code>ip-lookup</code> IP threat intelligence</li>
+          <li><code>domain-lookup</code> Domain reputation check</li>
+          <li><code>secret-scan</code> Secret/credential detection</li>
+          <li><code>fim</code> File integrity monitoring</li>
+          <li><code>log-analyze</code> Security log analysis</li>
+          <li><code>base64</code> Encode/decode utility</li>
+          <li><code>timeline</code> Forensic timeline builder</li>
+          <li><code>yara-scan</code> YARA rule matching</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Section 4: Architecture ============ -->
+<section id="architecture">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">Section 04</span>
+      <h2>Architecture</h2>
+      <p>Layered design with strict separation of concerns and defense in depth.</p>
+    </div>
+
+    <div class="arch-diagram">
+      <div class="arch-layer">
+        <span class="arch-label user">User Layer</span>
+        <div class="arch-items">
+          <div class="arch-item">CLI (clientshell)</div>
+          <div class="arch-item">Web Dashboard</div>
+          <div class="arch-item">Interactive Shell</div>
+        </div>
+      </div>
+
+      <span class="arch-arrow">&#9661; &nbsp; HTTP/JSON + WebSocket &nbsp; &#9661;</span>
+
+      <div class="arch-layer">
+        <span class="arch-label service">Service Layer</span>
+        <div class="arch-items">
+          <div class="arch-item">Auth RBAC</div>
+          <div class="arch-item">Audit SHA-256</div>
+          <div class="arch-item">Secrets Manager</div>
+          <div class="arch-item">Session Recording</div>
+          <div class="arch-item">Bastion Proxy</div>
+        </div>
+      </div>
+
+      <span class="arch-arrow">&#9661; &nbsp; HMAC-SHA256 Auth + Subprocess &nbsp; &#9661;</span>
+
+      <div class="arch-layer">
+        <span class="arch-label infra">Infrastructure Layer</span>
+        <div class="arch-items">
+          <div class="arch-item">Docker VMs</div>
+          <div class="arch-item">KVM VMs</div>
+          <div class="arch-item">cs-toolbox</div>
+          <div class="arch-item">Keeper Integration</div>
+          <div class="arch-item">Vault Integration</div>
+        </div>
+      </div>
+
+      <span class="arch-arrow">&#9661; &nbsp; Communication &nbsp; &#9661;</span>
+
+      <div class="arch-layer">
+        <span class="arch-label comm">Communication Layer</span>
+        <div class="arch-items">
+          <div class="arch-item">HTTP/JSON + HMAC Auth</div>
+          <div class="arch-item">Subprocess Fallback</div>
+          <div class="arch-item">WebSocket Real-time</div>
+          <div class="arch-item">X-Request-ID Correlation</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Section 5: Security ============ -->
+<section id="security">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">Section 05</span>
+      <h2>Security</h2>
+      <p>Every action is authenticated, authorized, and recorded in a tamper-proof chain.</p>
+    </div>
+
+    <div class="security-grid">
+      <div class="sec-card">
+        <span class="sec-icon">&#9939;</span>
+        <h3>Immutable Audit Trail</h3>
+        <p>Every user action is recorded in a SHA-256 hash chain. Each entry includes the hash of the previous entry, creating a tamper-evident, append-only log that can be independently verified.</p>
+        <div class="sec-detail">hash[n] = SHA256(hash[n-1] + action + timestamp + user)</div>
+      </div>
+
+      <div class="sec-card">
+        <span class="sec-icon">&#9919;</span>
+        <h3>HMAC-SHA256 Token Auth</h3>
+        <p>All API communication is authenticated using HMAC-SHA256 signed tokens. Tokens are time-limited and bound to the originating session for replay attack prevention.</p>
+        <div class="sec-detail">Authorization: HMAC-SHA256 ts=&lt;epoch&gt; sig=&lt;hex&gt;</div>
+      </div>
+
+      <div class="sec-card">
+        <span class="sec-icon">&#9881;</span>
+        <h3>Role-Based Access Control</h3>
+        <p>Four-tier RBAC system enforces least-privilege access across all operations.</p>
+        <div class="rbac-table table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Permission</th>
+                <th>Viewer</th>
+                <th>Analyst</th>
+                <th>Admin</th>
+                <th>Super</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>View sessions</td>
+                <td class="check">&#10003;</td>
+                <td class="check">&#10003;</td>
+                <td class="check">&#10003;</td>
+                <td class="check">&#10003;</td>
+              </tr>
+              <tr>
+                <td>Execute commands</td>
+                <td class="cross">&#10007;</td>
+                <td class="check">&#10003;</td>
+                <td class="check">&#10003;</td>
+                <td class="check">&#10003;</td>
+              </tr>
+              <tr>
+                <td>Manage users</td>
+                <td class="cross">&#10007;</td>
+                <td class="cross">&#10007;</td>
+                <td class="check">&#10003;</td>
+                <td class="check">&#10003;</td>
+              </tr>
+              <tr>
+                <td>Kill sessions</td>
+                <td class="cross">&#10007;</td>
+                <td class="cross">&#10007;</td>
+                <td class="check">&#10003;</td>
+                <td class="check">&#10003;</td>
+              </tr>
+              <tr>
+                <td>System config</td>
+                <td class="cross">&#10007;</td>
+                <td class="cross">&#10007;</td>
+                <td class="cross">&#10007;</td>
+                <td class="check">&#10003;</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="sec-card">
+        <span class="sec-icon">&#9878;</span>
+        <h3>Bidirectional Audit</h3>
+        <p>Every request carries an <code>X-Request-ID</code> header for full correlation between client and server audit trails. Both sides log independently, enabling cross-verification.</p>
+        <div class="sec-detail">X-Request-ID: &lt;uuid&gt; (correlated across client + server)</div>
+      </div>
+
+      <div class="sec-card" style="grid-column: 1 / -1;">
+        <span class="sec-icon">&#128274;</span>
+        <h3>Secrets Never in Clear Text</h3>
+        <p>Secret values are never written to logs, stdout, stderr, or error messages. The secret scanner detects and masks credentials, API keys, tokens, and private keys in all output streams before they reach any sink. Integration with Keeper and Vault ensures secrets are retrieved just-in-time and never persisted locally.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Section 6: API Reference ============ -->
+<section id="api">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">Section 06</span>
+      <h2>API Reference</h2>
+      <p>REST and WebSocket endpoints for programmatic access and integration.</p>
+    </div>
+
+    <h4 class="api-group-title">cs-server REST API</h4>
+
+    <div class="endpoint">
+      <span class="method get">GET</span>
+      <div class="endpoint-info">
+        <div class="endpoint-path">/api/health</div>
+        <div class="endpoint-desc">Server health check. Returns status, uptime, and version.</div>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <span class="method get">GET</span>
+      <div class="endpoint-info">
+        <div class="endpoint-path">/api/status</div>
+        <div class="endpoint-desc">Active sessions, connected clients, and system resource usage.</div>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <span class="method get">GET</span>
+      <div class="endpoint-info">
+        <div class="endpoint-path">/api/recordings</div>
+        <div class="endpoint-desc">List session recordings with metadata, timestamps, and audit hashes.</div>
+      </div>
+    </div>
+
+    <h4 class="api-group-title">WebSocket</h4>
+
+    <div class="endpoint">
+      <span class="method ws">WS</span>
+      <div class="endpoint-info">
+        <div class="endpoint-path">ws://localhost:8080/ws</div>
+        <div class="endpoint-desc">Real-time bidirectional channel for shell I/O, events, and session control. Supports binary frames for terminal data and text frames for JSON control messages.</div>
+      </div>
+    </div>
+
+    <h4 class="api-group-title">cs-toolbox API</h4>
+
+    <div class="endpoint">
+      <span class="method get">GET</span>
+      <div class="endpoint-info">
+        <div class="endpoint-path">/health</div>
+        <div class="endpoint-desc">Toolbox service health and loaded tool count.</div>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <span class="method get">GET</span>
+      <div class="endpoint-info">
+        <div class="endpoint-path">/tools</div>
+        <div class="endpoint-desc">List all available tools with names, categories, and parameter schemas.</div>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <span class="method post">POST</span>
+      <div class="endpoint-info">
+        <div class="endpoint-path">/exec</div>
+        <div class="endpoint-desc">Execute a tool by name with parameters. Returns structured JSON results. Requires HMAC-SHA256 authentication.</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 32px;">
+      <pre><span class="cm"># Example: Execute a tool via the API</span>
+<span class="fn">curl</span> <span class="op">-X</span> POST http://localhost:9090/exec \
+  <span class="op">-H</span> <span class="st">"Content-Type: application/json"</span> \
+  <span class="op">-H</span> <span class="st">"Authorization: HMAC-SHA256 ts=1700000000 sig=a1b2c3..."</span> \
+  <span class="op">-d</span> <span class="st">'{"tool": "whois", "params": {"target": "example.com"}}'</span></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ============ New Features (v2.0) ============ -->
+<section id="new-features">
+  <div class="container">
+    <div class="section-header">
+      <h2>New in v2.0</h2>
+      <p>Distributed architecture, system monitoring, SQL engine, and plugin system</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <h3>cs-query (SQL Engine)</h3>
+        <p>Query system state with SQL-like syntax. 7 virtual tables: processes, connections, listening_ports, users, mounts, interfaces, env.</p>
+        <pre><span class="fn">cs-toolbox</span> query <span class="st">"SELECT pid, name FROM processes WHERE user = 'root'"</span>
+<span class="fn">cs-toolbox</span> query <span class="st">".tables"</span>
+<span class="fn">cs-toolbox</span> query <span class="st">"SELECT * FROM connections WHERE state = 'ESTABLISHED'"</span></pre>
+      </div>
+      <div class="card">
+        <h3>cs-sysmon (Monitoring)</h3>
+        <p>Sysinternals-like tools: process monitor with tree view, autoruns scanner (systemd/launchd/cron), and tcpview with connection diff.</p>
+        <pre><span class="fn">cs-toolbox</span> procmon <span class="op">--tree</span> <span class="op">--sort</span> cpu
+<span class="fn">cs-toolbox</span> autoruns <span class="op">--new</span>
+<span class="fn">cs-toolbox</span> tcpview <span class="op">--diff</span></pre>
+      </div>
+      <div class="card">
+        <h3>Distributed Mode</h3>
+        <p>Multi-agent orchestration: broadcast commands to all agents, group by tag, chain with pipelines.</p>
+        <pre><span class="kw">:agents</span> list
+<span class="kw">:broadcast</span> health system
+<span class="kw">:agent</span> acme netexplorer <span class="op">--alerts</span></pre>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-top: 24px;">
+      <div class="card">
+        <h3>Network Explorer</h3>
+        <p>Real-time connection monitor with IP reputation scoring (0-100), auto-refresh, and color-coded alerts.</p>
+        <pre><span class="fn">cs-toolbox</span> netexplorer <span class="op">--watch</span>
+<span class="fn">cs-toolbox</span> netexplorer <span class="op">--reputation</span>
+<span class="fn">cs-toolbox</span> netexplorer <span class="op">--watch</span> <span class="op">--interval</span> 2</pre>
+      </div>
+      <div class="card">
+        <h3>Plugin System</h3>
+        <p>Modular architecture with setup wizard, predefined bundles (minimal/network/soc/full), and auto-upgrade.</p>
+        <pre><span class="fn">cs-toolbox</span> setup <span class="op">--bundle</span> soc
+<span class="fn">cs-toolbox</span> plugin list
+<span class="fn">cs-toolbox</span> upgrade <span class="op">--all</span></pre>
+      </div>
+      <div class="card">
+        <h3>Web Capture</h3>
+        <p>Capture web pages via HTTP (no browser needed). Full report with HTML source, headers, TLS info, and title.</p>
+        <pre><span class="fn">cs-toolbox</span> screenshot https://example.com
+<span class="fn">cs-toolbox</span> screenshot https://10.0.0.1 <span class="op">--insecure</span>
+<span class="fn">cs-toolbox</span> screenshot url <span class="op">--format</span> headers</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Footer ============ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-stats">
+      <div class="footer-stat"><strong>Go stdlib only</strong> &mdash; zero external dependencies</div>
+      <div class="footer-stat"><strong>21</strong> packages, <strong>21</strong> test suites</div>
+      <div class="footer-stat"><strong>74&ndash;100%</strong> coverage</div>
+      <div class="footer-stat"><strong>70+</strong> SOC tools</div>
+      <div class="footer-stat"><strong>3 platforms</strong> &mdash; Linux, macOS, Windows</div>
+      <div class="footer-stat"><strong>0</strong> data races</div>
+    </div>
+    <p>&copy; 2024&ndash;2026 ClientShell Contributors. Built entirely with the Go standard library. v2.0.0</p>
+  </div>
+</footer>
+
+</body>
+</html>

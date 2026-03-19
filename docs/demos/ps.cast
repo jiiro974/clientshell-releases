@@ -1,4 +1,4 @@
-{"version":2,"width":120,"height":30,"timestamp":1773927703,"title":"Process List","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
+{"version":2,"width":120,"height":30,"timestamp":1773929081,"title":"Process List","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
 [0.0000, "o", "\u001b[1;32m❯\u001b[0m "]
 [0.3000, "o", "c"]
 [0.3400, "o", "s"]
@@ -14,5 +14,8 @@
 [0.7400, "o", "p"]
 [0.7800, "o", "s"]
 [1.0200, "o", "\r\n"]
-[1.5200, "o", "/Users/jro/Documents/claude/dev/pbox/clientshell/scripts/gen-demos.sh: line 25: timeout: command not found\r\n"]
-[2.0400, "o", "\u001b[1;32m❯\u001b[0m "]
+[1.5200, "o", "\r\n"]
+[1.5400, "o", " Process List\r\n"]
+[1.5600, "o", "  PID:           28258\r\n"]
+[1.5800, "o", "  Goroutines:    1\r\n"]
+[2.1000, "o", "\u001b[1;32m❯\u001b[0m "]

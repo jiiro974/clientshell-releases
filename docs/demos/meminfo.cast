@@ -1,4 +1,4 @@
-{"version":2,"width":120,"height":30,"timestamp":1773927703,"title":"Memory Info","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
+{"version":2,"width":120,"height":30,"timestamp":1773929081,"title":"Memory Info","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
 [0.0000, "o", "\u001b[1;32m❯\u001b[0m "]
 [0.3000, "o", "c"]
 [0.3400, "o", "s"]
@@ -19,5 +19,11 @@
 [0.9400, "o", "f"]
 [0.9800, "o", "o"]
 [1.2200, "o", "\r\n"]
-[1.7200, "o", "/Users/jro/Documents/claude/dev/pbox/clientshell/scripts/gen-demos.sh: line 25: timeout: command not found\r\n"]
-[2.2400, "o", "\u001b[1;32m❯\u001b[0m "]
+[1.7200, "o", "\r\n"]
+[1.7400, "o", " Memory Info\r\n"]
+[1.7600, "o", "\r\n"]
+[1.7800, "o", " Go Runtime\r\n"]
+[1.8000, "o", "  Alloc:         0 MB\r\n"]
+[1.8200, "o", "  Sys:           11 MB\r\n"]
+[1.8400, "o", "  GC Runs:       0\r\n"]
+[2.3600, "o", "\u001b[1;32m❯\u001b[0m "]

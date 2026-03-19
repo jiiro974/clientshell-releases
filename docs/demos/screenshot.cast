@@ -1,4 +1,4 @@
-{"version":2,"width":120,"height":30,"timestamp":1773927703,"title":"Web Capture","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
+{"version":2,"width":120,"height":30,"timestamp":1773929082,"title":"Web Capture","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
 [0.0000, "o", "\u001b[1;32m❯\u001b[0m "]
 [0.3000, "o", "c"]
 [0.3400, "o", "s"]
@@ -85,5 +85,15 @@
 [3.5800, "o", "l"]
 [3.6200, "o", "l"]
 [3.8600, "o", "\r\n"]
-[4.3600, "o", "/Users/jro/Documents/claude/dev/pbox/clientshell/scripts/gen-demos.sh: line 25: timeout: command not found\r\n"]
-[4.8800, "o", "\u001b[1;32m❯\u001b[0m "]
+[4.3600, "o", "\r\n"]
+[4.3800, "o", " Web Capture: https://example.com\r\n"]
+[4.4000, "o", "  Status:        200\r\n"]
+[4.4200, "o", "  Title:         Example Domain\r\n"]
+[4.4400, "o", "  Content-Type:  text/html\r\n"]
+[4.4600, "o", "  Size:          528 bytes\r\n"]
+[4.4800, "o", "  Output:        /tmp/cs-demo-capture.html\r\n"]
+[4.5000, "o", "  Format:        full\r\n"]
+[4.5200, "o", "  Duration:      35ms\r\n"]
+[4.5400, "o", "  TLS:           TLS 1.3 (TLS_AES_128_GCM_SHA256)\r\n"]
+[4.5600, "o", "  Server:        cloudflare\r\n"]
+[5.0800, "o", "\u001b[1;32m❯\u001b[0m "]

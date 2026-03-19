@@ -1,4 +1,4 @@
-{"version":2,"width":120,"height":30,"timestamp":1773927702,"title":"Subnet Calculator","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
+{"version":2,"width":120,"height":30,"timestamp":1773929077,"title":"Subnet Calculator","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
 [0.0000, "o", "\u001b[1;32m❯\u001b[0m "]
 [0.3000, "o", "c"]
 [0.3400, "o", "s"]
@@ -30,5 +30,15 @@
 [1.3800, "o", "2"]
 [1.4200, "o", "4"]
 [1.6600, "o", "\r\n"]
-[2.1600, "o", "/Users/jro/Documents/claude/dev/pbox/clientshell/scripts/gen-demos.sh: line 25: timeout: command not found\r\n"]
-[2.6800, "o", "\u001b[1;32m❯\u001b[0m "]
+[2.1600, "o", "\r\n"]
+[2.1800, "o", " Subnet Calculator\r\n"]
+[2.2000, "o", "\r\n"]
+[2.2200, "o", "  Network:       10.0.0.0/24\r\n"]
+[2.2400, "o", "  Mask:          255.255.255.0\r\n"]
+[2.2600, "o", "  Wildcard:      0.0.0.255\r\n"]
+[2.2800, "o", "  Range:         10.0.0.1 → 10.0.0.254\r\n"]
+[2.3000, "o", "  Broadcast:     10.0.0.255\r\n"]
+[2.3200, "o", "  Hosts:         254 usable / 256 total\r\n"]
+[2.3400, "o", "  Class:         A\r\n"]
+[2.3600, "o", "  Private:       yes\r\n"]
+[2.8800, "o", "\u001b[1;32m❯\u001b[0m "]

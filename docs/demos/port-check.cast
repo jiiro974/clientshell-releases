@@ -1,4 +1,4 @@
-{"version":2,"width":120,"height":30,"timestamp":1773927702,"title":"Port Check","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
+{"version":2,"width":120,"height":30,"timestamp":1773929075,"title":"Port Check","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
 [0.0000, "o", "\u001b[1;32m❯\u001b[0m "]
 [0.3000, "o", "c"]
 [0.3400, "o", "s"]
@@ -37,5 +37,9 @@
 [1.6600, "o", "4"]
 [1.7000, "o", "3"]
 [1.9400, "o", "\r\n"]
-[2.4400, "o", "/Users/jro/Documents/claude/dev/pbox/clientshell/scripts/gen-demos.sh: line 25: timeout: command not found\r\n"]
-[2.9600, "o", "\u001b[1;32m❯\u001b[0m "]
+[2.4400, "o", "\r\n"]
+[2.4600, "o", " Port Check: google.com:443\r\n"]
+[2.4800, "o", "  ✓ Port 443 is open\r\n"]
+[2.5000, "o", "  Latency:       66.07 ms\r\n"]
+[2.5200, "o", "  Protocol:      HTTPS\r\n"]
+[3.0400, "o", "\u001b[1;32m❯\u001b[0m "]

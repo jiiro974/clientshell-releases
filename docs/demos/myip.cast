@@ -1,4 +1,4 @@
-{"version":2,"width":120,"height":30,"timestamp":1773927702,"title":"Public IP","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
+{"version":2,"width":120,"height":30,"timestamp":1773929078,"title":"Public IP","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
 [0.0000, "o", "\u001b[1;32m❯\u001b[0m "]
 [0.3000, "o", "c"]
 [0.3400, "o", "s"]
@@ -16,5 +16,9 @@
 [0.8200, "o", "i"]
 [0.8600, "o", "p"]
 [1.1000, "o", "\r\n"]
-[1.6000, "o", "/Users/jro/Documents/claude/dev/pbox/clientshell/scripts/gen-demos.sh: line 25: timeout: command not found\r\n"]
-[2.1200, "o", "\u001b[1;32m❯\u001b[0m "]
+[1.6000, "o", "\r\n"]
+[1.6200, "o", " Public IP\r\n"]
+[1.6400, "o", "  IP:            102.35.27.135\r\n"]
+[1.6600, "o", "  Reverse:       102-35-27-135.zeop.re.\r\n"]
+[1.6800, "o", "  Source:        https://ifconfig.co/ip\r\n"]
+[2.2000, "o", "\u001b[1;32m❯\u001b[0m "]

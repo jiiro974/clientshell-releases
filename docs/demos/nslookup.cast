@@ -1,4 +1,4 @@
-{"version":2,"width":120,"height":30,"timestamp":1773927702,"title":"DNS Lookup","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
+{"version":2,"width":120,"height":30,"timestamp":1773929073,"title":"DNS Lookup","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
 [0.0000, "o", "\u001b[1;32m❯\u001b[0m "]
 [0.3000, "o", "c"]
 [0.3400, "o", "s"]
@@ -32,5 +32,13 @@
 [1.4600, "o", "o"]
 [1.5000, "o", "m"]
 [1.7400, "o", "\r\n"]
-[2.2400, "o", "/Users/jro/Documents/claude/dev/pbox/clientshell/scripts/gen-demos.sh: line 25: timeout: command not found\r\n"]
-[2.7600, "o", "\u001b[1;32m❯\u001b[0m "]
+[2.2400, "o", "\r\n"]
+[2.2600, "o", " DNS Lookup: example.com\r\n"]
+[2.2800, "o", "  → 104.18.26.120\r\n"]
+[2.3000, "o", "  → 104.18.27.120\r\n"]
+[2.3200, "o", "  → 2606:4700::6812:1b78\r\n"]
+[2.3400, "o", "  → 2606:4700::6812:1a78\r\n"]
+[2.3600, "o", "\r\n"]
+[2.3800, "o", "  Resolve Time:  52.81 ms\r\n"]
+[2.4000, "o", "  Records:       4\r\n"]
+[2.9200, "o", "\u001b[1;32m❯\u001b[0m "]

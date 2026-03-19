@@ -1,4 +1,4 @@
-{"version":2,"width":120,"height":30,"timestamp":1773927703,"title":"Query — Environment","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
+{"version":2,"width":120,"height":30,"timestamp":1773929112,"title":"Query — Environment","env":{"SHELL":"/bin/zsh","TERM":"xterm-256color"}}
 [0.0000, "o", "\u001b[1;32m❯\u001b[0m "]
 [0.3000, "o", "c"]
 [0.3400, "o", "s"]
@@ -45,5 +45,10 @@
 [1.9800, "o", "5"]
 [2.0200, "o", "'"]
 [2.2600, "o", "\r\n"]
-[2.7600, "o", "/Users/jro/Documents/claude/dev/pbox/clientshell/scripts/gen-demos.sh: line 25: timeout: command not found\r\n"]
-[3.2800, "o", "\u001b[1;32m❯\u001b[0m "]
+[2.7600, "o", "key\tvalue\r\n"]
+[2.7800, "o", "SSH_AGENT_PID\t34619\r\n"]
+[2.8000, "o", "NoDefaultCurrentDirectoryInExePath\t1\r\n"]
+[2.8200, "o", "TERM_PROGRAM\tApple_Terminal\r\n"]
+[2.8400, "o", "CLAUDE_CODE_ENTRYPOINT\tcli\r\n"]
+[2.8600, "o", "ANDROID_HOME\t/Users/jro/Library/Android/sdk\r\n"]
+[3.3800, "o", "\u001b[1;32m❯\u001b[0m "]
