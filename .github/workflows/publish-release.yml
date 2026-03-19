@@ -1,7 +1,7 @@
 # =============================================================================
 # publish-release.yml
 # Declenche par le repo prive via repository_dispatch
-# Recoit les binaires et cree une release publique
+# Recoit les binaires, cree une release publique, et met a jour la doc
 # =============================================================================
 name: Publish Public Release
 
@@ -26,21 +26,13 @@ jobs:
           TAG="${{ github.event.client_payload.tag }}"
           RELEASE_ID="${{ github.event.client_payload.release_id }}"
           REPO="jiiro974/clientshell"
-
-          echo "📦 Downloading artifacts for $TAG (release $RELEASE_ID)"
+          echo "Downloading artifacts for $TAG"
           mkdir -p artifacts
-
-          # Lister les assets de la release privee
           gh api "repos/$REPO/releases/$RELEASE_ID/assets" \
             --jq '.[].name' | while read -r ASSET_NAME; do
-            echo "  ↓ $ASSET_NAME"
-            gh release download "$TAG" \
-              --repo "$REPO" \
-              --pattern "$ASSET_NAME" \
-              --dir artifacts
+            echo "  $ASSET_NAME"
+            gh release download "$TAG" --repo "$REPO" --pattern "$ASSET_NAME" --dir artifacts
           done
-
-          ls -lah artifacts/
 
       - name: Create public release
         env:
@@ -48,48 +40,45 @@ jobs:
         run: |
           TAG="${{ github.event.client_payload.tag }}"
           BODY="${{ github.event.client_payload.body }}"
-          PRERELEASE="${{ github.event.client_payload.prerelease }}"
+          PRE="${{ github.event.client_payload.prerelease }}"
+          FLAGS=""
+          [ "$PRE" = "true" ] && FLAGS="--prerelease"
+          gh release create "$TAG" --title "ClientShell $TAG" --notes "$BODY" $FLAGS artifacts/*
 
-          PRERELEASE_FLAG=""
-          if [ "$PRERELEASE" = "true" ]; then
-            PRERELEASE_FLAG="--prerelease"
-          fi
-
-          # Creer la release publique
-          gh release create "$TAG" \
-            --title "ClientShell $TAG" \
-            --notes "$BODY" \
-            $PRERELEASE_FLAG \
-            artifacts/*
-
-          echo "✅ Release $TAG publiee"
-
-      - name: Update downloads data for site
+      - name: Update release data + downloads page
         run: |
           TAG="${{ github.event.client_payload.tag }}"
           DATE=$(date -u +"%Y-%m-%d")
 
-          # Generer le fichier de donnees pour Jekyll
-          cat > docs/_data/latest_release.yml << EOF
-          version: "$TAG"
-          date: "$DATE"
-          assets:
+          # Update Jekyll data
+          mkdir -p docs/_data
+          printf 'version: "%s"\ndate: "%s"\n' "$TAG" "$DATE" > docs/_data/latest_release.yml
+
+          # Generate downloads page
+          mkdir -p docs/_docs
+          BASE="https://github.com/jiiro974/clientshell-releases/releases/download/$TAG"
+          cat > docs/_docs/downloads.md << EOF
+          ---
+          layout: default
+          title: Telechargements
+          ---
+          # Telechargements — $TAG
+          *Publie le $DATE*
+          ## Binaires
+          | Plateforme | clientshell | cs-toolbox | cs-server |
+          |------------|------------|------------|-----------|
+          | macOS arm64 | [Download]($BASE/clientshell-darwin-arm64) | [Download]($BASE/cs-toolbox-darwin-arm64) | [Download]($BASE/cs-server-darwin-arm64) |
+          | macOS amd64 | [Download]($BASE/clientshell-darwin-amd64) | [Download]($BASE/cs-toolbox-darwin-amd64) | [Download]($BASE/cs-server-darwin-amd64) |
+          | Linux amd64 | [Download]($BASE/clientshell-linux-amd64) | [Download]($BASE/cs-toolbox-linux-amd64) | [Download]($BASE/cs-server-linux-amd64) |
+          | Linux arm64 | [Download]($BASE/clientshell-linux-arm64) | [Download]($BASE/cs-toolbox-linux-arm64) | [Download]($BASE/cs-server-linux-arm64) |
+          | Windows amd64 | [Download]($BASE/clientshell-windows-amd64.exe) | [Download]($BASE/cs-toolbox-windows-amd64.exe) | [Download]($BASE/cs-server-windows-amd64.exe) |
+          | Windows arm64 | [Download]($BASE/clientshell-windows-arm64.exe) | [Download]($BASE/cs-toolbox-windows-arm64.exe) | [Download]($BASE/cs-server-windows-arm64.exe) |
           EOF
 
-          for f in artifacts/*; do
-            FNAME=$(basename "$f")
-            SIZE=$(du -h "$f" | cut -f1)
-            cat >> docs/_data/latest_release.yml << EOF
-            - name: "$FNAME"
-              size: "$SIZE"
-              url: "https://github.com/jiiro974/clientshell-releases/releases/download/$TAG/$FNAME"
-          EOF
-          done
-
-      - name: Commit updated release data
+      - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/_data/latest_release.yml
-          git diff --staged --quiet || git commit -m "chore: update release data for ${{ github.event.client_payload.tag }}"
+          git add docs/
+          git diff --staged --quiet || git commit -m "docs: update for ${{ github.event.client_payload.tag }}"
           git push
