@@ -25,6 +25,6 @@
 [1.7800, "o", "  num_cpu:       10\r\n"]
 [1.8000, "o", "  go_version:    go1.26.1\r\n"]
 [1.8200, "o", "  pid:           28563\r\n"]
-[1.8400, "o", "  hostname:      MacBook-Pro.local\r\n"]
+[1.8400, "o", "  hostname:      cs-workstation.local\r\n"]
 [1.8600, "o", "  os:            darwin\r\n"]
 [2.3800, "o", "\u001b[1;32m❯\u001b[0m "]

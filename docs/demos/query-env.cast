@@ -50,5 +50,5 @@
 [2.8000, "o", "NoDefaultCurrentDirectoryInExePath\t1\r\n"]
 [2.8200, "o", "TERM_PROGRAM\tApple_Terminal\r\n"]
 [2.8400, "o", "CLAUDE_CODE_ENTRYPOINT\tcli\r\n"]
-[2.8600, "o", "ANDROID_HOME\t/Users/jro/Library/Android/sdk\r\n"]
+[2.8600, "o", "ANDROID_HOME\t/home/csuser/Library/Android/sdk\r\n"]
 [3.3800, "o", "\u001b[1;32m❯\u001b[0m "]
