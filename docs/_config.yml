@@ -29,5 +29,7 @@ nav:
     url: /docs/configuration/
   - title: Utilisation
     url: /docs/usage/
+  - title: Demos
+    url: /docs/demos/
   - title: Releases
     url: https://github.com/jiiro974/clientshell-releases/releases
